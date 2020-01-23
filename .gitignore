@@ -1,0 +1,6 @@
+# ignore temporary files
+*.tmp
+*~
+
+# dont ignore gitignore
+!.gitignore

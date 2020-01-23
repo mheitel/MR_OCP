@@ -9,6 +9,9 @@ clear variables
 close all
 clc
 
+% add path of performReduction method
+addpath('../src')
+
 %% define parameters for optimization
 % number of optimization variables
 param.nx = 1;

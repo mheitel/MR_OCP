@@ -8,7 +8,7 @@
 
 clear variables
 close all
-clc
+%clc
 
 % add path of performReduction method
 addpath('../src')
@@ -31,11 +31,12 @@ param.N = 40; % number of control intervals
 param.M = 1; % RK4 steps per interval
 % fixed initial value for slow components
 x0 = 1;
+y0 = 0.5;
 % initial values of optimization variables
 % (x_1,y_1,u_1,x_2,...,u_n,x_n+1,y_n+1)
 param.w0 = ones(n_var*(param.N+1)-param.nu,1);
 param.w0(1:n_var:end) = x0*ones(param.N+1,1);
-param.w0(2:n_var:end) = 0.5*ones(param.N+1,1);
+param.w0(2:n_var:end) = y0*ones(param.N+1,1);
 % lower and upper bounds for optimization variables
 param.lbw = zeros(n_var*(param.N+1)-param.nu,1);
 param.lbw(3:n_var:end) = 0*ones(param.N,1);
@@ -43,7 +44,8 @@ param.ubw = 9*ones(n_var*(param.N+1)-param.nu,1);
 param.ubw(3:n_var:end) = 9*ones(param.N,1);
 param.lbw(1) = x0;
 param.ubw(1) = x0;
-param.w0(1) = x0;
+param.lbw(2) = y0-1e-3;
+param.ubw(2) = y0+1e-3;
 
 %% define dynamics (ode +  objective function)
 % obective function/integrand
@@ -59,9 +61,12 @@ options.suffix = 'lift_zdp2';
 options.append = false;
 %options.ipopt_options = struct('print_time',false,'ipopt',struct('linear_solver','ma27','print_level',1));
 options.ipopt_options = struct('print_time',false,'ipopt',struct('linear_solver','mumps','print_level',1));
+options.plotForTeX = false;
 
 %% perform optimization
 % call template for model reduction
-sol = performReduction(dynamics, param, options);
+% [sol,time] = performReduction(dynamics, param, options);
+[sol,time] = performReduction(dynamics, param, options);
 % post Processing -> Plot, save files
+options.time = time;
 enzyme_postProcessing(sol,param, options)

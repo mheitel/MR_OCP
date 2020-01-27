@@ -10,19 +10,36 @@ if isempty(sol)
    return;
 end
 w_opt = full(sol.x);
+% latex options
+set(groot,'DefaultLegendInterpreter','latex','DefaultTextInterpreter','latex')
 
 %% Plot the solution
 x_opt = w_opt(1:3:end);
 y_opt = w_opt(2:3:end);
-u_opt = w_opt(3:3:end);
+u1_opt = w_opt(3:3:end);
+
 tgrid = linspace(0, param.T, param.N+1);
 clf;
 hold on
+
+if nargin>2
+    options = varargin{1};
+    if isfield(options,'plotForTeX')
+        if options.plotForTeX
+            reset(groot)
+            set(groot,'DefaultLineLineWidth',1.2,...
+                'DefaultStairLineWidth',1.2,...
+                'DefaultLegendInterpreter','latex',...
+                'DefaultTextInterpreter','latex')
+        end
+    end
+end
+
 plot(tgrid, x_opt, '--')
 plot(tgrid, y_opt, '-')
-stairs(tgrid, [u_opt; nan], '-.')
-xlabel('t')
-legend('x','y','u')
+stairs(tgrid, [u1_opt; nan], '-.')
+xlabel('time $t$')
+legend({'$z_s$','$z_f$','$u$'},'location','NorthWest')
 
 % OPTIONAL: save solution in .mat-file 
 if nargin>2
@@ -30,21 +47,25 @@ if nargin>2
     if options.savesolution
         % generate variables according to suffix
         allvars = {};
-        for i = 1:param.nz % states
-            name = [char('x'-1+i) '_' suffix];
+        for i = 1:param.nx + param.ny % states
+            name = [char('x'-1+i) '_' options.suffix];
             eval([name '=' char('x'-1+i) '_opt;']);
             allvars = {allvars{:} name};
         end
-        for i = 1:param.nu+1 % time + controls
-            name = [char('t'-1+i) '_' suffix];
-            eval([name '=' char('t'-1+i) '_opt;']);
+        for i = 1:param.nu % controls
+            name = [char('u') num2str(i) '_' options.suffix];
+            eval([name '=' char('u') num2str(i) '_opt;']);
             allvars = {allvars{:} name};
         end
+        % save time
+        name = ['time' '_' options.suffix];
+        eval([name '= options.time;'])
+        allvars = {allvars{:} name};
         % save variables in savefile
         if options.append
-            save([savefile '.mat'],allvars{:} ,'-append')
+            save([options.savefile '.mat'],allvars{:} ,'-append')
         else
-            save([savefile '.mat'],allvars{:})
+            save([options.savefile '.mat'],allvars{:})
         end
     end
 end

@@ -1,7 +1,7 @@
 function [sol, time] = performReduction(dynamics,param, varargin)
 %PERFORMREDUCTION performs manifold based >>model reduction<< of OCP
 %   sol = performReduction(dynamics,param, options) attempts to solve the
-%   following optimal control problem with singular perturbed dynamics
+%   following optimal control problem with singularly perturbed dynamics
 %           min int(L,0,T)dt
 %           subject to: dx/dt       = f_s(x,y,u)
 %                       eps*dy/dt   = f_f(x,y,u)
@@ -43,10 +43,10 @@ nz = param.nx + param.ny;
 DT = param.T/param.N/param.M;
 
 % Declare model variables
-x = MX.sym('x',param.nx);
-y = MX.sym('y',param.ny);
+x = SX.sym('x',param.nx);
+y = SX.sym('y',param.ny);
 z = [x; y];
-u = MX.sym('u',param.nu);
+u = SX.sym('u',param.nu);
 
 % dynamics
 xdot = dynamics.x(z,u);
@@ -97,28 +97,28 @@ lbg = [];
 ubg = [];
 
 % Initial conditions
-Z0 = MX.sym('Z0', nz);
+Z0 = SX.sym('Z0', nz);
 w = [w, {Z0}];
 
 % New NLP variable for the control
-Uk = MX.sym('U_0',param.nu);
+Uk = SX.sym('U_0',param.nu);
 w = [w, {Uk}];
 
-% Link fast and slow components via manifold
-g = [g,{sim_const(Z0,Uk)}];
-lbg = [lbg; zeros(param.ny,1)];
-ubg = [ubg; zeros(param.ny,1)];
+% % Link fast and slow components via manifold
+% g = [g,{sim_const(Z0,Uk)}];
+% lbg = [lbg; zeros(param.ny,1)];
+% ubg = [ubg; zeros(param.ny,1)];
 
 % Formulate the NLP
 Zk = Z0;
 for k=0:param.N-1
     % Integrate till the end of the interval
     Xk_end = integrator(Zk(1:param.nx),[Zk(param.nx+1:nz); Uk], DT); % only for slow variables
-    % piecewise constant approximation for objective integral
+    % piecewise constant approximation of objective integral
     J = J + DT*obj(Zk,Uk);
     
     % New NLP variable for state at the end of the interval
-    Zk = MX.sym(['Z_' num2str(k+1)], nz);
+    Zk = SX.sym(['Z_' num2str(k+1)], nz);
     w = [w, {Zk}];
     
     % Add equality constraint(s)
@@ -128,7 +128,7 @@ for k=0:param.N-1
     
     if k<param.N-1
         % New NLP variable for the control
-        Uk = MX.sym(['U_' num2str(k)],param.nu);
+        Uk = SX.sym(['U_' num2str(k)],param.nu);
         w = [w, {Uk}];
     end
     

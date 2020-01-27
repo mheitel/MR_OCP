@@ -6,9 +6,14 @@
 
 close all
 clear variables
-clc
+%clc
 
 import casadi.*
+
+%disp('**** start michaelis-menten example ****')
+%tic
+
+saveSolution = 0;
 
 % Time horizon
 T = 5;
@@ -16,10 +21,10 @@ epsilon = 1e-6;
 eta = 1;
 
 % Declare model variables
-x = MX.sym('x');
-y = MX.sym('y');
+x = SX.sym('x');
+y = SX.sym('y');
 z = [x; y];
-u = MX.sym('u');
+u = SX.sym('u');
 
 % dynamics
 zdot = [-x+(x+0.5)*y + u; (x-(x+1.0)*y)/epsilon];
@@ -47,17 +52,12 @@ h = {};
 % "Lift" initial conditions
 Z0 = MX.sym('Z0', 2);
 w = [w, {Z0}];
-valy = eta/(1+eta) + 0.5*eta./((eta+1).^4)*epsilon;
-lbw = [lbw; 0; 0];
-ubw = [ubw; 9; 9];
-w0 = [w0; eta; valy];
-g = [g; {Z0-[eta;valy]}];
-lbg = [lbg; 0;0];
-ubg = [ubg; 0; 0];
+% valy = eta/(1+eta) + 0.5*eta./((eta+1).^4)*epsilon;
+valy = 0.5;
 % box constraints for initial conditions
-% lbw = [lbw; eta; valy];
-% ubw = [ubw; eta; valy];
-% w0 = [w0; eta; valy];
+lbw = [lbw; eta; valy];
+ubw = [ubw; eta; valy];
+w0 = [w0; eta; valy];
 
 % Formulate the NLP
 Zk = Z0;
@@ -78,12 +78,12 @@ for k=0:N-1
     w = [w, {Zk}];
     lbw = [lbw; 0; 0];
     ubw = [ubw; 9; 9];
-    w0 = [w0; eta; 0.5];
-
+    w0 = [w0; eta; valy];
+    
     % Add equality constraint
     g = [g, {Zk_end-Zk}];
     lbg = [lbg; 0; 0];
-    ubg = [ubg; 0; 0];            
+    ubg = [ubg; 0; 0];
 end
 h = [h; {vertcat(w{:})-ubw;-vertcat(w{:})+lbw}];
 
@@ -95,15 +95,16 @@ prob = struct('f', J, 'x', vertcat(w{:}), 'g', vertcat(g{:}));
 solver = nlpsol('solver', 'ipopt', prob,opts);
 
 %disp('**** problem within casadi context defined ****')
+%toc
 
 %% Solve the NLP
 tic
 sol = solver('x0', w0, 'lbx', lbw, 'ubx', ubw,'lbg', lbg, 'ubg', ubg);
-t_opt = toc;
+time_full = toc;
 w_opt = full(sol.x);
 
 %disp('**** work is done! ****')
-fprintf('elapsed time in total is \t%10.6f seconds\n',t_opt);
+fprintf('elapsed time in total is \t%10.6f seconds\n',time_full);
 
 %% Plot the solution
 x_opt = w_opt(1:3:end);
@@ -112,8 +113,19 @@ u_opt = w_opt(3:3:end);
 tgrid = linspace(0, T, N+1);
 clf;
 hold on
+
 plot(tgrid, x_opt, '--')
 plot(tgrid, y_opt, '-')
 stairs(tgrid, [u_opt; nan], '-.')
-xlabel('t')
-legend('x','y','u')
+xlabel('time $t$')
+legend({'$z_s$','$z_f$','$u$'},'location','NorthWest')
+
+%% save solution
+if saveSolution
+    x_full = x_opt;
+    y_full = y_opt;
+    u1_full = u_opt;  
+    save('savedSolutions/enzym_full_N40.mat','x_full', 'y_full', 'u1_full' ,'time_full'); % '-append'
+    clear x_full y_full u1_full   
+end
+

@@ -1,3 +1,4 @@
+%CSTR_MAIN solve OCP of CSTR via manifold-based model reduction methods
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%       optimal control of a CSTR      %%%%
 %%% solve reduced optimal control problem %%%
@@ -11,6 +12,9 @@ close all
 clc
 
 import casadi.*
+
+% add path of performReduction method
+addpath('../src')
 
 %% define parameters for optimization
 % number of optimization variables

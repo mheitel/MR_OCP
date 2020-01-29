@@ -1,7 +1,11 @@
+%CSTR_ORIG_MS solve OCP of CSTR via multiple shooting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%               optimal control of a CSTR             %%%%
 %%% solve optimal control problem with multiple shooting %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% AUTHOR:   Marcus Heitel
+% DATE:     Jan 23rd, 2017
 
 clear variables
 close all

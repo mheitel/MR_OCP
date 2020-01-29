@@ -1,11 +1,23 @@
 function [] = cstr_postProcessing(sol,param, dynamics, varargin)
-
-%               -> savesolution - save solution variables in mat file?
-%                                 (type:bool)
-%               -> savefile     - filepath for the saved solution
-%                                 (only needed if savesolution = true)
-%               -> suffix       -
-%               -> append       -
+%CSTR_POSTPROCESSING post processing of CSTR example
+%   plots the results of the CSTR OCP and saves them (optional) 
+%
+% INPUT: 
+%   sol        - solution struct (output of PERFORMREDUCTION) 
+%   param      - see input of PERFORMREDUCTION
+%   varargin   - contains options for saving results
+%    -> savesolution - save solution variables in mat file? (type:bool)
+%    -> savefile     - filepath for the saved solution
+%                      (only needed if savesolution = true)
+%    -> suffix       - suffix of saved filename
+%    -> append       - append variables in file? (type:bool)
+%
+%    -> plotForTeX   - show legend of plots in tex style
+%    -> saveplots    - save plots? (type:boolean)
+%
+% See also PERFORMREDUCTION
+% AUTHOR:   Marcus Heitel
+% DATE:     Jan 23rd, 2017
 if isempty(sol)
     fprintf(2,'postProcessing not possible. Variable >sol< is empty\n');
     return;

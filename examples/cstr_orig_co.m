@@ -1,7 +1,11 @@
+%CSTR_ORIG_CO solve OCP of CSTR via collocation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%            optimal control of a CSTR          %%%%
 %%% solve optimal control problem with collocation %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% AUTHOR:   Marcus Heitel
+% DATE:     Jan 23rd, 2017
 
 clear variables
 close all

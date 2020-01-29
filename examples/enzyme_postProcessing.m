@@ -1,6 +1,18 @@
 function [] = enzyme_postProcessing(sol,param, varargin)
 %ENZYM_POSTPROCESSING post processing of enzyme example
 %   plots the results of the enzyme OCP and saves them (optional) 
+%
+% INPUT: 
+%   sol        - solution struct (output of PERFORMREDUCTION) 
+%   param      - see input of PERFORMREDUCTION
+%   varargin   - contains options for saving results
+%    -> savesolution - save solution variables in mat file? (type:bool)
+%    -> savefile     - filepath for the saved solution
+%                      (only needed if savesolution = true)
+%    -> suffix       - suffix of saved filename
+%    -> append       - append variables in file? (type:bool)
+%
+% See also PERFORMREDUCTION
 % AUTHOR:   Marcus Heitel
 % DATE:     Jan 23rd, 2017
 

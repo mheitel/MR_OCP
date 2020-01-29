@@ -1,5 +1,5 @@
 function [sol, time] = performReduction(dynamics,param, varargin)
-%PERFORMREDUCTION performs manifold based >>model reduction<< of OCP
+%PERFORMREDUCTION performs manifold based model reduction of OCP
 %   sol = performReduction(dynamics,param, options) attempts to solve the
 %   following optimal control problem with singularly perturbed dynamics
 %           min int(L,0,T)dt

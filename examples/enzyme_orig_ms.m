@@ -1,8 +1,11 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Michealis-Menten-Henri enyzme example %%%%
-%%% solve original optimal control problem %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%ENZYME_ORIG_MS solve enzyme OCP via multiple shooting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%          Michealis-Menten-Henri enyzme example      %%%%
+%%% solve optimal control problem with multiple shooting %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% AUTHOR:   Marcus Heitel
+% DATE:     Jan 23rd, 2017
 
 close all
 clear variables

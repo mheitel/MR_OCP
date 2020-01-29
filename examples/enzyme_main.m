@@ -1,3 +1,4 @@
+%ENZYME_MAIN solve OCP of enzyme example via manifold-based model reduction methods
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Michealis-Menten-Henri enyzme example %%%%
 %%% solve reduced optimal control problem %%%

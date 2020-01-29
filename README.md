@@ -21,15 +21,10 @@ If you want to test your installation, please open MATLAB on you system and swit
 ```
 enzyme_main
 ```
-
 ## Software 
 
 * [CasADi](https://web.casadi.org/) - Tool for nonlinear optimization and algorithmic differentiation
 * [IPOPT](https://github.com/coin-or/Ipopt) - Nonlinear Program Solver
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Authors
 
